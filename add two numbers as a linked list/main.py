@@ -23,7 +23,7 @@ class Solution:
                 l2.next = ListNode(0)
             self.addTwoNumbers(l1.next, l2.next, c)
 
-        return l1
+            return l1
 
         lr = ListNode(0)
         lr.next = ListNode(0)
