@@ -1,0 +1,8 @@
+Source: The TechLead
+Origin: Google
+
+Given a grid, find a maximum number of connected colors:
+
+0, 0, 1, 2
+0, 1, 2, 1
+2, 1, 1, 1
