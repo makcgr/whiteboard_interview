@@ -14,28 +14,21 @@ class MySolution:
             the_list = the_list.next
         print("")
 
-
     def reverseLL(self, the_list):
         # TODO: reverse the linked list
         print("Will reverse the linked list:")
         self.printLL(the_list)
         cur_node = the_list
-        rev_list = None
-        rev_stack = []
+        cur_node_prev = None
 
         while cur_node is not None:
-            rev_stack.append(cur_node)
-            cur_node = cur_node.next
-
-        cur_node = rev_stack.pop() if len(rev_stack) != 0 else None
-        rev_list = cur_node
-        while cur_node is not None:       
-            node_next = rev_stack.pop() if len(rev_stack) != 0 else None
-            cur_node.next = node_next
-            cur_node = node_next
+            next = cur_node.next
+            cur_node.next = cur_node_prev
+            cur_node_prev = cur_node
+            cur_node = next
 
         print("Reversed list:")
-        self.printLL(rev_list)
+        self.printLL(cur_node_prev)
 
 
 list = Node(1)
@@ -44,5 +37,5 @@ list.next.next = Node(5)
 
 MySolution().reverseLL(list)
 
-# Spatial complexity will be O(N*2), basically O(N)
+# Spatial complexity will be O(N)
 # Time complexity will be O(N) also
