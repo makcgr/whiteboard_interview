@@ -1,0 +1,21 @@
+Source: Daily Interview Pro
+Origin: Twitter
+
+Given a binary search tree (BST) and a value s, split the BST into 2 trees, where one tree has all values less than or equal to s, and the other tree has all values greater than s while maintaining the tree structure of the original BST. You can assume that s will be one of the node's value in the BST. Return both tree's root node as a tuple.
+
+# (3, (1, (2)), (4, None, (5)))
+# How the tree looks like
+#     3
+#   /   \
+#  1     4
+#   \     \
+#    2     5
+
+
+# ((1, None, (2)), (3, None, (4, None, (5))))
+# Split into two trees
+# 1    And   3
+#  \          \
+#   2          4
+#               \
+#                5
