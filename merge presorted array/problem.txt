@@ -1,0 +1,1 @@
+Write a function that accepts two already-sorted arrays of integers and returns an array with all elements from both that is also sorted.
