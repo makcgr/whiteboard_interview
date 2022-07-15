@@ -44,66 +44,82 @@ Solution
 
 */
 
-var words = new [] {"eggs", "karat", "apple", "snack", "tuna"};
-//{ "apple", "eggs", "snack", "karat", "tuna" }
+//var words = new [] {"eggs", "karat", "apple", "snack", "tuna"};
+//// The circle can be built: { "apple", "eggs", "snack", "karat", "tuna" }
 
-var result = CanChainWords(words);
+var testCases = new []
+{
+    new [] {"eggs", "karat", "apple", "snack", "tuna"},                     // correct: true
+    new [] {"eggs", "karat", "apple", "snack", "tuna", "sage", "ears"},     // correct: true
+    new [] {"axb", "bxc", "cxd", "dxa"},                                    // correct: true
+    new [] {"bxc", "axb", "dxa", "cxd"},                                    // correct: true
+    new [] {"cxd", "axb", "bxc", "dxa"},                                    // correct: true
+    new [] {"aba", "aca"},                                                  // correct: true
+    new [] {"eggs", "karat", "strawberries", "snack", "tulips"},            // correct: false
+    new [] {"axb", "bxc", "cxd", "dxe"},                                    // correct: false
+    new [] {"aba"},                                                         // correct: false
+    new string[] {},                                                        // correct: false
+};
 
-Console.WriteLine($"Can chain words: {result}");
+foreach (var testWords in testCases)
+{
+    foreach(var word in testWords)
+    {
+        Console.Write("{0}{1}",word, word==testWords[testWords.Length-1]?". ":", ");
+    }
+    Console.WriteLine($"Result: {CanChainWords(testWords)}");
+}
 
 bool CanChainWords(string[] words)
 {
-    if (words == null)
-        throw new ArgumentNullException(nameof(words));
-    if (words.Length < 2)
-        throw new ArgumentException($"Array {nameof(words)} has insufficient words count");
+        if (words == null || words.Length < 2)
+        {
+                // Should have more than one word in words list parameter
+                return false;
+        }
 
-    int currentWordIx = 0;
+        var usedDictionary = new Dictionary<string, bool>(words.Length);
+        var circleBuilder = new List<string>();
 
-    var dictionary = new Dictionary<int, bool>(words.Length);
-    var circleBuilder = new List<int>();
-    
-    for(int i=0; i<words.Length; i++)
-    {
-        dictionary.Add(i, false);
-    }
+        // Init the "Used words" dictionary with "false" to have O(1) for lookup
+        for(int i=0; i<words.Length; i++)
+        {
+            usedDictionary.Add(words[i], false);
+        }
  
-    while (currentWordIx<words.Length) 
-    {
-        var currentWord = words[currentWordIx];
-        if (!dictionary[currentWordIx]) //check if the word was used already in the circle builder
-        {       
-            circleBuilder.Add(currentWordIx);
-            dictionary[currentWordIx] = true;
+        // Start the
+        circleBuilder.Add(words[0]);
+        usedDictionary[words[0]] = true;
 
-            if(circleBuilder.Count < words.Length) // if it's the last word, no need to find the suitable "next"
+        var currentIx = 0;
+        while (circleBuilder.Count < words.Length) // if circle builder's length is equal to words count, no need to find the suitable "next" (circle is built!)
+        {
+            var current = words[currentIx];
+
+            // try to find suitable "next" word by traversing the dictionary and also checking "used" flag
+            bool found = false;
+
+            for(int potentiallySuitableIx=0; potentiallySuitableIx < words.Length; potentiallySuitableIx++)
             {
-                // try to find suitable "next" word by traversing the dictionary and also checking "used" flag
-                int potentiallySuitableIx = 0;
-                bool found = false;    
-                while (!found && potentiallySuitableIx < words.Length)
-                {
-                    string potentiallySuitableWord = words[potentiallySuitableIx];
-                    bool used = dictionary[potentiallySuitableIx];
+                    var potentiallySuitable = words[potentiallySuitableIx];
+                    bool used = usedDictionary[potentiallySuitable];
 
-                    if (!used && currentWord[currentWord.Length-1]==potentiallySuitableWord[0])
+                    if (!used && current[current.Length-1]==potentiallySuitable[0])
                     {
-                        found = true;
-                        dictionary[potentiallySuitableIx] = true;
-                        circleBuilder.Add(potentiallySuitableIx);
-                        break;
+                            found = true;
+                            usedDictionary[potentiallySuitable] = true;
+                            circleBuilder.Add(potentiallySuitable);
+                            currentIx = potentiallySuitableIx;
+
+                            break;
                     }
-                    potentiallySuitableIx++;
-                }
-                if (!found)
-                {
+            }
+            if (!found)
+            {
                     return false;
-                }
             }
         }
-        currentWordIx++;
-    }
-    var lastWord = words[circleBuilder[circleBuilder.Count-1]];
-    var firstWord = words[circleBuilder[0]];
-    return lastWord[lastWord.Length-1] == firstWord[0];
+        var lastWord = circleBuilder[circleBuilder.Count-1];
+        var firstWord = circleBuilder[0];
+        return lastWord[lastWord.Length-1] == firstWord[0];
 }
