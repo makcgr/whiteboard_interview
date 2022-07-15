@@ -15,37 +15,55 @@ The words in the order of ['apple', 'eggs', 'snack', 'karat', 'tuna'] creates a 
 
 Solution
 
-- can start from any word in the list
-- each word is a chance to build a circle
-- if any word does not have any suitable next word from the list, there is no chance to build a circle 
+- can start from any word in the list, each word is a chance to build a full circle
+- if any word does not have any other suitable next word from the list, there is no chance to build a circle 
 - "the circle" is an array of words 
-   - where each word's last char is the same as next word's first char, except for last word in the array
+    - where each word's last char is the same as next word's first char, except for last word in the array
 - once the circle is built, the number of words used in chain equals total number of word, 
   and the last word's last char matches the first word's first char), we can finish our program
 
 - regarding storage:
-  - we need to store word's indices in order ("circle builder array" of N integers)
+  we need to store word's indices in order ("circle builder array" of N integers)
 
-- algo:
-  - must have "current word" pointer
-  - must have "potentially suitable word" pointer
-  - each word can be marked as "used" (e.g. word is a key in Dictionary<string,bool>, and value can be "used" boolean value),
-    this will give us O(1) access time to each word
-  - "suitable" words must be looked starting from the beginning of Dictionary, excluding "current word" and "used" words,
-    until there are no such words available (reached the end of Dictionary)
-     - if a word is "suitable": 
-        * it is marked as "used" in the dictionary, 
-        * it's index is added to "circle builder array", 
-        * the "current word" pointer is increased until the next unused word or until there are no unused words left
-     - if a word is not "suitable":
-        increase "potential suitable word" pointer
-  - if length of "the circle" is equal to the length of list, check the "circle builder array": 
-    the last word's last char should be the same as the first word's first char - circle is built, otherwise it's not possible. 
+- algo
+    - will have 
+    - must have "current word" pointer
+    - must have "potentially suitable word" pointer
+    - must have "used words" list (or dictionary)
+    - must have "circle builder" list where suitable words are placed subsequently maintaining chained order
 
+    - will start with the first word in list
+    - when "suitable" next word is found, it can be marked as "used" and placed into "circle builder" list 
+    - "suitable" words must be looked starting from the beginning of word list, excluding "current word" and "used" words,
+        until there are no more words available
+         - if a word is "suitable": 
+                * it is added to "used words" list/dict, 
+                * it is added to "circle builder array", 
+                * the "current word" pointer is increased until the next unused word or until there are no unused words left
+         - if a word is not "suitable": 
+                increase "potential suitable word" pointer
+    
+    - if there is no suitable word found, then the "words circle" is not possible
+
+    - processing is over when the length of "the circle builder" is equal to the length of list
+        - check the "circle builder array": 
+          the last word's last char should be the same as the first word's first char. 
+          if it's true, the "words circle" is built, otherwise it's not possible. 
+ 
+- optimizations
+    - can store "used words" in a hashtable (Dictionary) 
+        * e.g. word is a key in Dictionary<string,bool>, and value means if it is "used" in circle
+        * or index of word is a key in Dictionary<int, bool>, and value means if it is "used" in circle
+        * this will give us O(1) lookup time for each word 
+
+    - instead of traversing all the words in a list to find a "suitable", can store "potentially suitable" words 
+        in a separate list, deleting used ones,  so the number of checks will be decreased - performance gain 
+
+    - can use indices instead of strings for "used words dictionary", "circle builder", it will also allow duplicate words 
+
+- Time complexity: O(N*2)
+  Can improve time by introducing extra list for "not used words" 
 */
-
-//var words = new [] {"eggs", "karat", "apple", "snack", "tuna"};
-//// The circle can be built: { "apple", "eggs", "snack", "karat", "tuna" }
 
 var testCases = new []
 {
