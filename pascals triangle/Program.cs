@@ -39,7 +39,6 @@ public class Solution
     {
         int[][] triangleArray = new int[numRows][];
 
-        var arrayList = new List<IList<int>>();
         for (int num = 1; num <= numRows; num++)
         {
             triangleArray[num-1] = new int[num];    // we are row with index [num-1]
@@ -61,9 +60,8 @@ public class Solution
                     currentRow[x] = left + right;
                 }                    
             }
-            arrayList.Add(currentRow.ToList());
         }
-        return arrayList;
+        return triangleArray;
     }
 
     public IList<IList<int>> Generate2(int numRows) 
@@ -87,5 +85,3 @@ public class Solution
         return arrayList;
     }
 }
-
-
