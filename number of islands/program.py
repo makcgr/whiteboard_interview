@@ -31,6 +31,7 @@ class Solution(object):
             if self.inRange(grid, nr, nc) and grid[nr][nc] == 1:
                 self.dfs(grid, nr, nc)
 
+
 grid = [[1, 1, 0, 0, 0],
         [0, 1, 0, 0, 1],
         [1, 0, 0, 1, 1],
