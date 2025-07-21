@@ -1,0 +1,8 @@
+Longest Non-Decreasing Subarray
+
+Find the longest non-decreasing subarray in an array of numbers, where each subsequent number is greater than or equal to the previous one.
+
+Example:
+[1, 2, 2, 3, 1, 4, 5, 6]
+
+The following input should return 4 since the longest non-decreasing subarray is [1, 4, 5, 6].
