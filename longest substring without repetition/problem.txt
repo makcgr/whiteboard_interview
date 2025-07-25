@@ -15,3 +15,71 @@ print Solution().lengthOfLongestSubstring('abrkaabcdefghijjxxx')
 # 10
 
 Can you find a solution in linear time?
+
+
+abrkaabcdefghijjxxx
+    ^                 
+    ^
+Dict:
+a	0
+b	1
+r	2
+k	3
+
+
+Head:
+3
+Tail:
+0
+Len:
+4
+Max len: 4
+
+
+
+Hashmap of used chars
+Traverse through symbols
+If hashmap contains current symbol, reset the counter (and hashmap)
+	Or 
+	If dict contains current symbol, update the current max, and reset the counter
+	Or
+	If dict contains current symbol, update the current max, and set the tail to current symbol
+
+
+Naive solution:
+	For each letter, start from this letter and add each subsequent to hashset, ensuring there are no duplicates, incrementing the counter. If at the end the counter is > current max, update current max. O(N^2) complexity
+
+Optimal solution:
+	Go with one pass, using the continuity. Use the dynamic start pointer
+
+ abrkaabcdefghijjxxx
+ ^                 
+^
+
+using System.Collections.Generic;
+using Math;
+
+var str = "abrkaabcdefghijjxxx";
+Console.WriteLine($"Answer: {GetLongestSubstringWORepetitions(str)}");
+
+static int GetLongestSubstringWORepetitions(string input)
+{
+	if (input == null || input.Length = 0)
+		return 0;
+
+	var arr = input.ToCharArray();	
+	var head = 0;
+	var tail = 0;
+	var maxLen = 0;
+	var hashSet = new HashSet<char>();
+	while (head < arr.Length) {
+		if (hs.Contains(arr[head]) {
+			maxLen = Math.Max(maxLen, head-tail);
+			hashSet.Clear();
+			tail = head;
+		}
+		hashSet.Add(arr[head]);
+		head++;			
+	}
+	return Math.Max(maxLen, head-tail);
+}
