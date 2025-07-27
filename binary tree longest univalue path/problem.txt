@@ -1,0 +1,14 @@
+Find the longest univalue path for the given binary tree
+
+The longest univalue path is the length of the longest path where every node in the path has the same value.
+
+Example:
+         3
+       /   \
+     3      3
+    / \      \
+   2   3      3
+  / \
+ 1   2
+
+ Answer: 4
