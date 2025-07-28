@@ -1,0 +1,10 @@
+Find the maximum path sum for a given binary search tree
+
+Example:
+         1
+       /   \
+     2      3
+    / \      
+   3   2      
+
+ Answer: 9
