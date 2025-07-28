@@ -1,0 +1,11 @@
+Find the sum of the given binary tree
+
+Example:
+
+     1
+    / \
+   2   3
+      / \
+     4   5
+
+Answer: 15
