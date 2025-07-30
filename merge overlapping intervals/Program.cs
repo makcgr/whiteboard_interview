@@ -18,7 +18,7 @@ int[][] Merge(int[][] intervals)
 
     foreach (var interval in intervals)
     {
-        if (interval[0] <= current[1])
+        if (interval[0] <= current[1]) // if overlapping
             current[1] = Math.Max(current[1], interval[1]);
         else
         {
