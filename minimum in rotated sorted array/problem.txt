@@ -1,0 +1,7 @@
+Find a minumum value in a rotated sorted array.
+
+E.g.
+{ 5, 6, 7, 1 ,2, 3, 4 }
+
+Answer:
+1
