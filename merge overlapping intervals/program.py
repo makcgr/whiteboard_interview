@@ -2,8 +2,8 @@
 #   - first we need to sort intervals to place them in order of "start"
 #   - we initiate result with first interval from list
 #   - then we simply iterate over the rest intervals 
-#          and if current interval overlaps (start < previous interval's end), 
-#              then we try to update the resulting (previous) interval 
+#          and if current interval overlaps with previous (start <= previous interval's end), 
+#              then we update the resulting (previous) interval 
 #              otherwise we add new interval to resulting array
 
 def mergeIntervals(intervals: list[list[int]]) -> list[int]:
