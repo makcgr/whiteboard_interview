@@ -1,0 +1,15 @@
+This was asked recently by Yandex.
+
+You are given a text which needs to be cleaned from smileys. 
+Smileys begin with ":-"  and then goes arbitrary number of "(" or ")".
+These are valid smileys: 
+:-) :-))) :-( :-((((  
+Remove the smileys from the given text.
+
+E.g. the following input text:
+"Hello! :-) The weather is bad! :-((("
+
+Should give the following output:
+"Hello!  The weather is bad! "
+
+
