@@ -1,29 +1,29 @@
-# "Hello! :-) Weather is bad :-("
-
-# ":-)"
+# Message: "Hello! :-)) Weather is bad :-(" -> need to get rid of smiles
+# Base smiles: ":-)" ":-(" Variants ":-))" ":-(((" etc. (arbitrary number of braces)
 
 def cleanMsgFromSmileys(msg: str) -> str:
     res = ""
-    smileLen = 3     # smiles: ":-)" ":-("
+    prefix = ":-" 
+    endings = { ")", "(" } 
+    MIN_LEN = len(prefix) + 1
     i = 0
     while (i < len(msg)):
         c = msg[i]
-        # check for smiley. if yes, forward to end of smiley sequence
-        if i+2 < len(msg) and c == ":" and msg[i+1] == "-" and (msg[i+2] == ")" or msg[i+2] == "("):
-            cntAdd = 0 # additional braces count
-            brace = msg[i+2]
-            j = i+2
-            while j+1 < len(msg) and msg[j+1] == brace:
-                cntAdd += 1
-                j += 1
-            i += smileLen + cntAdd
+        brace_ix = i + MIN_LEN - 1
+        # check for smiley. if found, forward to end of smiley sequence
+        if (brace_ix  < len(msg) 
+            and msg[i : brace_ix] == prefix 
+            and msg[brace_ix] in endings):
+            i += MIN_LEN
+            # advance to the last brace 
+            while i < len(msg) and msg[i] == msg[brace_ix]:
+                i += 1
         else:
             res += c
             i += 1
     return res
 
-
-inputs = [ ":-)", "Hello! :-) :-))) Weather is bad :-(((" ]
+inputs = [ ":-)", "Hello! :-) :-))) Weather is bad :-(((", ":-", ":-|" ]
 for text in inputs:
     print(cleanMsgFromSmileys(text))
 
