@@ -10,19 +10,15 @@ def level_order(root):
     q = deque([root])
     result = []
     while q:
-        level = []
         qLen = len(q)
-        for _ in range(qLen):
-            node = q.popleft()
-            if node:
-                level.append(node.value)
-                q.append(node.left)
-                q.append(node.right)
-        if level:
-            result.append(level)
+        node = q.popleft()
+        if node:
+           result.append(node.value)
+           q.append(node.left)
+           q.append(node.right)
     return result
 
 node = Node(9)
-node.left = Node(7)
+node.left = Node(7, Node(5), Node(10))
 node.right = Node(20, Node(15), Node(22))
 print(level_order(node))

@@ -23,6 +23,18 @@ def reverse(head):
         prev = cur
         cur = temp
 
+def reverseRec(head):
+    if not head:
+        return None
+    def reverseRecHelper(prev, node):
+        next = node.next
+        if not next:
+            return node
+        node.next = prev
+        return reverseRecHelper(node, next)
+
+    return reverseRecHelper(None, head)
+
 
 def print_list(node):
     while node is not None:

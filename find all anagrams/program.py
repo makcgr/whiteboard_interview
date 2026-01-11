@@ -8,12 +8,17 @@
 # b: 1  b: 1
 # c: 1  a: 1
 #
-# 1) range(len(p)):
-#    append pCount
-#    append sCount
+# 1) for i in range(len(p)):
+#    pCount[p[i]] += 1
+#    sCount[s[i]] += 1
 #
-# for i in range (len(p), len(s):
-#    update hashtable (remove latest)
+#    if pCount == sCount: add 0 to result
+# l = 0
+# for i in range (len(p), len(s)):
+#    update hashtables 
+#       -= 1 sCount at s[l] & remove sCount at s[l] if 0
+#        +=1 sCount at s[r] 
+#    update l += 1
 #    if anagram(sCount = pCount): update result
 
 def find_anagrams(s: str, p: str) -> list[int]:

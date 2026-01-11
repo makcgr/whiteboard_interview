@@ -24,7 +24,7 @@ public class TreeNode
         Value = value;
     }
 
-    public TreeNode(int value, TreeNode? left, TreeNode? right)
+    public TreeNode(int value, TreeNode? left = null, TreeNode? right = null)
     {
         Value = value;
         Left = left;
@@ -48,8 +48,10 @@ public class Solution
         int left = DFS(node.Left);
         int right = DFS(node.Right);
 
-        int leftPath = (node.Left != null && node.Left.Value == node.Value) ? left + 1 : 0;
-        int rightPath = (node.Right != null && node.Right.Value == node.Value) ? right + 1 : 0;
+        int leftPath = (node.Left != null && node.Left.Value == node.Value)
+            ? left + 1 : 0;
+        int rightPath = (node.Right != null && node.Right.Value == node.Value)
+            ? right + 1 : 0;
         maxLen = Math.Max(maxLen, leftPath + rightPath);
         return Math.Max(leftPath, rightPath);
     }
