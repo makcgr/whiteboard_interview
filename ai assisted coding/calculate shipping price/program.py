@@ -7,46 +7,18 @@ The code is calculating shipping based on
 
 But
 - validation should be done first and in the separate method (weight, zone, membership)
-- base price calculation should be done in separate classes - DomesticShippingCalculator, InternationalShippingCalculator  with  common BaseShippingCalculator with method Calculate(). You need to add an __init__ to BaseShippingCalculator. calculate() method  should accept weight and express parameters. 
-
-- concrete calculator should be created by the factory using the zone, and pass weight and express parameters to concrete calculator constructor.  
-- the membership should be taken into account in a separate function get_membership_multiplier. 
-- RoundPrice function should be defined to return the final result from the concrete calculator
-
+- base price calculation should be done in separate classes - DomesticShippingCalculator and InternationalShippingCalculator  with common base class BaseShippingCalculator containing method Calculate().
+- concrete calculator should be created by the factory using the zone parameter
+- the membership should be taken into account in a separate function  apply_membership_discount (accepts base price and membership, returns discounted price)
+- RoundPrice function should be defined to return the final result
+- There is no need for complex concrete shipping calculators. Just pass tier prices (tier1, tier2, tier3) and express multiplier to the base constructor and implement the calculate method in the base class.For base shipping calculator, define tier borders for weight as constants (the 5, 20 values)
 
 Overall, the method should be refactored as follows:
 - the validation done first 
 - the shipping base price is calculated with concrete shipping calculator from the factory
 - the membership multiplier is defined based on membership and applied to the shipping base price
 - the price after the membership multiplication is passed to RoundPrice() and the rounded price is returned from the RoundPrice()
-
-(Ignore this line: NOTE: Update after pass 1)
-- there is no need for complex concrete shipping calculators, just pass tier prices (tier1, tier2, tier3) to the base constructor
-    - for DomesticShippingCalculator, tier 1 (5.99), tier 2(12.99), tier 3 (24.99)
-    - for InternationalShippingCalculator, tier 1 (15.99), tier 2 (29.99), tier 3 (49.99)
-- for base shipping calculator, define tier borders for weight as constants (the 5, 20 values)
-- membership function: membership multipliers dict should be static, not to create it every time when calling the function.  introduce a function apply_membership_discount (accepts base price and membership, returns discounted price) 
-
-(Ignore this line: NOTE: Update after pass 2)
-- get_membership_multiplier name can be refactored to apply_membership_discount (accepts base price, returns discounted)
-
 '''
-
-
-
-
-
-
-def calculate_shipping(weight, zone, membership, express):
-    if not validate_input(weight, zone, membership):
-        return -1
-    
-    calculator = ShippingCalculatorFactory.create(zone)
-    base_price = calculator.calculate(weight, express)
-    final_price = apply_membership_discount(base_price, membership)
-    return round_price(final_price)
-
-
 def validate_input(weight, zone, membership):
     if weight <= 0:
         return False
@@ -55,23 +27,6 @@ def validate_input(weight, zone, membership):
     if membership not in ["none", "silver", "gold", "platinum"]:
         return False
     return True
-
-
-_MEMBERSHIP_MULTIPLIERS = {
-    "none": 1.0,
-    "silver": 0.9,
-    "gold": 0.8,
-    "platinum": 0.7
-}
-
-def apply_membership_discount(base_price, membership):
-    multiplier = _MEMBERSHIP_MULTIPLIERS.get(membership, 1.0)
-    return base_price * multiplier
-
-
-def round_price(price):
-    return round(price, 2)
-
 
 class BaseShippingCalculator:
     TIER1_WEIGHT = 5
@@ -96,26 +51,48 @@ class BaseShippingCalculator:
         
         return base_price
 
-
 class DomesticShippingCalculator(BaseShippingCalculator):
     def __init__(self):
-        super().__init__(tier1_price=5.99, tier2_price=12.99, tier3_price=24.99, express_multiplier=2.0)
-
+        super().__init__(tier1_price=5.99, tier2_price=12.99, tier3_price=24.99, express_multiplier=2)
 
 class InternationalShippingCalculator(BaseShippingCalculator):
     def __init__(self):
         super().__init__(tier1_price=15.99, tier2_price=29.99, tier3_price=49.99, express_multiplier=2.5)
 
-
 class ShippingCalculatorFactory:
     @staticmethod
-    def create(zone):
+    def create_calculator(zone):
         if zone == "domestic":
             return DomesticShippingCalculator()
         elif zone == "international":
             return InternationalShippingCalculator()
         return None
 
+def apply_membership_discount(base_price, membership):
+    discounts = {
+        "none": 1.0,
+        "silver": 0.9,
+        "gold": 0.8,
+        "platinum": 0.7
+    }
+    return base_price * discounts.get(membership, 1.0)
+
+def round_price(price):
+    return round(price, 2)
+
+def calculate_shipping(weight, zone, membership, express):
+    if not validate_input(weight, zone, membership):
+        return -1
+    
+    calculator = ShippingCalculatorFactory.create_calculator(zone)
+    if calculator is None:
+        return -1
+    
+    base_price = calculator.calculate(weight, express)
+    discounted_price = apply_membership_discount(base_price, membership)
+    final_price = round_price(discounted_price)
+    
+    return final_price
 
 if __name__ == "__main__":
     tests = [
