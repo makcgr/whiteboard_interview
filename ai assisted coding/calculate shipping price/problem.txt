@@ -1,0 +1,62 @@
+Your startup just launched a shipping feature. Your cofounder wrote the pricing logic over a weekend, and it works — but it's 7 levels of nested if/else statements deep. Nobody can read it, nobody wants to touch it, and you need to add new shipping zones next sprint.
+
+The function calculates shipping cost based on weight, destination, membership tier, and whether it's express delivery. It handles all the edge cases correctly. The problem? It looks like a Christmas tree turned sideways.
+
+Prompt your AI to flatten this pyramid into clean, readable code. Same behavior, same results — just code that a human can actually maintain. 3 public tests show you the format. 12 hidden tests check every edge case.
+
+Starter Code
+
+def calculate_shipping(weight, zone, membership, express):
+    if weight > 0:
+        if zone in ["domestic", "international"]:
+            if membership in ["none", "silver", "gold", "platinum"]:
+                if express:
+                    if zone == "domestic":
+                        if weight <= 5:
+                            base = 5.99
+                        else:
+                            if weight <= 20:
+                                base = 12.99
+                            else:
+                                base = 24.99
+                        base = base * 2  # express multiplier
+                    else:
+                        if weight <= 5:
+                            base = 15.99
+                        else:
+                            if weight <= 20:
+                                base = 29.99
+                            else:
+                                base = 49.99
+                        base = base * 2.5
+                else:
+                    if zone == "domestic":
+                        if weight <= 5:
+                            base = 5.99
+                        else:
+                            if weight <= 20:
+                                base = 12.99
+                            else:
+                                base = 24.99
+                    else:
+                        if weight <= 5:
+                            base = 15.99
+                        else:
+                            if weight <= 20:
+                                base = 29.99
+                            else:
+                                base = 49.99
+                if membership == "silver":
+                    base = base * 0.9
+                elif membership == "gold":
+                    base = base * 0.8
+                elif membership == "platinum":
+                    base = base * 0.7
+                return round(base, 2)
+            else:
+                return -1  # invalid membership
+        else:
+            return -1  # invalid zone
+    else:
+        return -1  # invalid weight
+    return round(base, 2)
